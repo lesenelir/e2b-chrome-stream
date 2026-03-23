@@ -1,0 +1,14 @@
+{
+  "scripts": {
+    "e2b:build:dev": "tsx --env-file=.env build.dev.ts",
+    "e2b:build:prod": "tsx --env-file=.env build.prod.ts",
+    "app": "tsx --env-file=.env app.ts"
+  },
+  "dependencies": {
+    "e2b": "^2.14.1"
+  },
+  "devDependencies": {
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}
