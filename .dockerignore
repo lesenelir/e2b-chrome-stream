@@ -1,0 +1,12 @@
+node_modules
+.git
+.idea
+.env
+*.ts
+tsconfig.json
+package.json
+pnpm-lock.yaml
+README.md
+.DS_Store
+.gitignore
+.dockerignore
