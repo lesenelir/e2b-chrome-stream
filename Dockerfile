@@ -18,7 +18,7 @@ RUN curl -fsSL https://dl.google.com/linux/linux_signing_key.pub \
     && apt-get update && apt-get install -y --no-install-recommends google-chrome-stable \
     && rm -rf /var/lib/apt/lists/*
 
-RUN ln -s /usr/share/novnc/vnc_lite.html /usr/share/novnc/index.html
+COPY vnc.html /usr/share/novnc/index.html
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
