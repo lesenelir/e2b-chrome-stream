@@ -2,14 +2,16 @@ import { Sandbox } from 'e2b'
 
 async function main() {
   console.log('Creating sandbox...')
-  const sandbox = await Sandbox.create('e2b-chrome-stream-dev')
+  const sandbox = await Sandbox.create('e2b-chrome-stream-dev', {
+    timeoutMs: 2* 60 * 1000, // 2 minutes
+  })
   console.log(`Sandbox created: ${sandbox.sandboxId}`)
 
-  const result = await sandbox.commands.run('echo "Hello from E2B sandbox!"')
-  console.log(`Command output: ${result.stdout}`)
+  const host = sandbox.getHost(8080)
+  // console.log(`noVNC URL: https://${host}?autoconnect=true&resize=scale&control_bar=false`)
 
-  await sandbox.kill()
-  console.log('Sandbox killed. Test passed!')
+  // vnc_lite
+  console.log(`noVNC URL: https://${host}?autoconnect=tru&scale=true`)
 }
 
 main().catch(console.error)
