@@ -35,12 +35,16 @@
       rfb = new RFB(screen, url);
       rfb.scaleViewport = true;
       rfb.resizeSession = true;
+      rfb.qualityLevel = 6;
+      rfb.compressionLevel = 2;
 
       rfb.addEventListener('connect', () => {
+        document.title = 'VNC - Connected';
         rfb.focus();
       });
 
       rfb.addEventListener('disconnect', () => {
+        document.title = 'VNC - Reconnecting...';
         setTimeout(connect, RECONNECT_DELAY);
       });
     }
