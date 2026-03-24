@@ -1,60 +1,89 @@
-# e2b-chrome-stream - E2B Sandbox Template
+# e2b-chrome-stream
 
-This is an E2B sandbox template that allows you to run code in a controlled environment.
+`e2b-chrome-stream` is an E2B template for running a full Chrome browser inside an ephemeral sandbox and viewing it through the browser with noVNC.
+
+The project packages a lightweight Linux desktop stack:
+
+- `Xvfb` provides the virtual display.
+- `Openbox` provides a minimal window manager.
+- `google-chrome-stable` runs on that display.
+- `x11vnc` exposes the desktop as a VNC server.
+- `noVNC` and `websockify` publish it over HTTP on port `8080`.
+
+The result is a sandbox you can open from a normal browser and use as a remote Chrome session.
+
+## What This Repository Contains
+
+- `Dockerfile`: Builds the runtime image with Chrome, X11, VNC, and noVNC.
+- `supervisord.conf`: Starts and supervises the display server, window manager, VNC bridge, noVNC, and Chrome.
+- `vnc.html`: Replaces the default noVNC entry page with a minimal full-screen client that auto-reconnects.
+- `template.ts`: Declares the E2B template from the Dockerfile.
+- `build.dev.ts`: Builds the development template as `e2b-chrome-stream-dev`.
+- `build.prod.ts`: Builds the production template as `e2b-chrome-stream`.
+- `app.ts`: Creates a sandbox from `e2b-chrome-stream-dev`, maps port `8080`, and prints the remote URL.
+
+## How It Works
+
+At runtime, `supervisord` starts the following services in order:
+
+1. `Xvfb :99 -screen 0 1024x768x24`
+2. `openbox --display :99`
+3. `xsetroot` to paint the background black
+4. `x11vnc` on the same display
+5. `websockify --web=/usr/share/novnc/ 8080 localhost:5900`
+6. `google-chrome-stable` attached to `DISPLAY=:99`
+
+When you call `sandbox.getHost(8080)`, E2B gives you a public host for the noVNC web app. Opening that URL connects you to the running Chrome session inside the sandbox.
 
 ## Prerequisites
 
-Before you begin, make sure you have:
-- An E2B account (sign up at [e2b.dev](https://e2b.dev))
-- Your E2B API key (get it from your [E2B dashboard](https://e2b.dev/dashboard))
-- Node.js and npm/yarn (or similar) installed
+Before using this project, you need:
 
-## Configuration
+- an E2B account
+- an E2B API key
+- Node.js
+- a package manager such as `pnpm` or `npm`
 
-1. Create a `.env` file in your project root or set the environment variable:
-   ```
-   E2B_API_KEY=your_api_key_here
-   ```
-
-## Installing Dependencies
+Create a local `.env` file:
 
 ```bash
-npm install e2b
+E2B_API_KEY=your_api_key_here
 ```
 
-## Building the Template
+## Build the Template
+
+Development template:
 
 ```bash
-# For development
-npm run e2b:build:dev
-
-# For production
-npm run e2b:build:prod
+pnpm e2b:build:dev
 ```
 
-## Using the Template in a Sandbox
+Production template:
 
-Once your template is built, you can use it in your E2B sandbox:
-
-```typescript
-import { Sandbox } from 'e2b'
-
-// Create a new sandbox instance
-const sandbox = await Sandbox.create('e2b-chrome-stream')
-
-// Your sandbox is ready to use!
-console.log('Sandbox created successfully')
+```bash
+pnpm e2b:build:prod
 ```
 
-## Template Structure
+These scripts build the Docker-based template under the following names:
 
-- `template.ts` - Defines the sandbox template configuration
-- `build.dev.ts` - Builds the template for development
-- `build.prod.ts` - Builds the template for production
+- `e2b-chrome-stream-dev`
+- `e2b-chrome-stream`
 
-## Next Steps
+## Start a Sandbox
 
-1. Customize the template in `template.ts` to fit your needs
-2. Build the template using one of the methods above
-3. Use the template in your E2B sandbox code
-4. Check out the [E2B documentation](https://e2b.dev/docs) for more advanced usage
+Run the development entry point:
+
+```bash
+pnpm dev
+```
+
+The script in [`app.ts`](/Users/lesenelir/GithubProjects/e2b-chrome-stream/app.ts) does three things:
+
+1. creates a sandbox from `e2b-chrome-stream-dev`
+2. sets a sandbox timeout of `2 * 60 * 1000` milliseconds
+3. prints the public noVNC URL for port `8080`
+
+Open the printed URL in your browser to view the remote Chrome window.
+
+## License
+MIT
