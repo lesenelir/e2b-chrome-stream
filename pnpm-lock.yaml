@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       e2b:
-        specifier: ^2.14.1
-        version: 2.14.1
+        specifier: ^2.18.0
+        version: 2.18.0
     devDependencies:
       tsx:
         specifier: ^4.21.0
@@ -225,8 +225,8 @@ packages:
   dockerfile-ast@0.7.1:
     resolution: {integrity: sha512-oX/A4I0EhSkGqrFv0YuvPkBUSYp1XiY8O8zAKc8Djglx8ocz+JfOr8gP0ryRMC2myqvDLagmnZaU9ot1vG2ijw==}
 
-  e2b@2.14.1:
-    resolution: {integrity: sha512-g0NPZNzwIaePTahu9ixBtqrw9IZQ8ThK8dt+DU394+jmxQJ+69c2t8A0j973/j+bHo3QdNFxIRIH6zDcC3ueaw==}
+  e2b@2.18.0:
+    resolution: {integrity: sha512-umWvNhKx3dWUfzcLPLO5Ep1qB5cTLuJlAlnxfKVUnOwx3yaO+H1PaAE2fihT4etEu3BNs3pHvdwa1VM+uMxe0w==}
     engines: {node: '>=20'}
 
   esbuild@0.27.4:
@@ -459,7 +459,7 @@ snapshots:
       vscode-languageserver-textdocument: 1.0.12
       vscode-languageserver-types: 3.17.5
 
-  e2b@2.14.1:
+  e2b@2.18.0:
     dependencies:
       '@bufbuild/protobuf': 2.11.0
       '@connectrpc/connect': 2.0.0-rc.3(@bufbuild/protobuf@2.11.0)
